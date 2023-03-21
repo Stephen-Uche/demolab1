@@ -1,8 +1,7 @@
-package com.example.demolab1;
+package com.example.demolab1.servlet;
 
+import com.example.demolab1.repository.FruitRepository;
 import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,10 +12,9 @@ import java.io.IOException;
 
 @WebServlet(name="fruitservlet", value = "/fruits")
 public class FruitServlet extends HttpServlet {
-    @PersistenceContext
-    private EntityManager entityManager;
+
     @Inject
-    private MyBean myBean;
+    FruitRepository repository;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
