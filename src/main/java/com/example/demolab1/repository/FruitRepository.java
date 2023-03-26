@@ -16,13 +16,13 @@ public class FruitRepository {
     @PersistenceContext
     EntityManager entityManager;
 
-    List<Fruit> findAll(){
+    public List<Fruit> findAll(){
 
         var query = entityManager.createQuery("select f from Fruit f");
         return (List<Fruit>) query.getResultList();
     }
 
-    Optional<Fruit>findOne(Long id){
+    public Optional<Fruit>findOne(Long id){
         return Optional.ofNullable(entityManager.find(Fruit.class, id));
     }
     public void insertFruit(Fruit fruit){

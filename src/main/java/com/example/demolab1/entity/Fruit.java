@@ -9,8 +9,8 @@ import jakarta.persistence.Id;
 public class Fruit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
+    private Long id;
     String name;
 
     public String getName() {
