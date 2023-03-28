@@ -17,9 +17,11 @@ public class FruitController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Fruit> getAll(){
+    public List<Fruit> getAll(@QueryParam("name") String name){
 
-        return repository.findAll();
+        if (name == null)
+            return repository.findAll();
+        return repository.findAllByName(name);
     }
     @GET
     @Path("/{id}")
@@ -36,4 +38,11 @@ public class FruitController {
     public void addOne(Fruit fruit) {
         repository.insertFruit(fruit);
     }
+
+    @DELETE
+    @Path("/{id}")
+    public void deleteOne(@PathParam("id") Long id) {
+        repository.deleteFruit(id);
+    }
+
 }
