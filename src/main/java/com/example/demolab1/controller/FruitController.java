@@ -2,6 +2,7 @@ package com.example.demolab1.controller;
 
 import com.example.demolab1.dto.FruitDto;
 import com.example.demolab1.entity.Fruit;
+import com.example.demolab1.mapper.FruitMapper;
 import com.example.demolab1.repository.FruitRepository;
 import com.example.demolab1.validate.FruitValidator;
 import jakarta.inject.Inject;
@@ -22,18 +23,17 @@ public class FruitController {
     @Inject
     FruitValidator validator;
 
+    @Inject
+    FruitMapper mapper;
+
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<FruitDto> getAll(@QueryParam("name") String name){
 
         if (name == null)
-            return map(repository.findAll());
-        return map(repository.findAllByName(name));
-    }
-
-    private List<FruitDto> map(List<Fruit> all) {
-
-        return all.stream().map(fruit -> new FruitDto(fruit.getId(), fruit.getName())).toList();
+            return mapper.map(repository.findAll());
+        return mapper.map(repository.findAllByName(name));
     }
 
     @GET
@@ -48,8 +48,9 @@ public class FruitController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addOne(@Valid Fruit fruit) {
-        //if (!validator.validate(fruit))
-            //return Response.status(400,"name can not be null or empty").build();
+
+        //if(!validator.validate(fruit))
+            //return Response.status(400,"name can't be null or empty").build();
         repository.insertFruit(fruit);
         return Response.created(URI.create("fruits/" + fruit.getId())).build();
     }
