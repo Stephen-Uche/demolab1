@@ -4,7 +4,10 @@ import com.example.demolab1.dto.FruitDto;
 import com.example.demolab1.entity.Fruit;
 import com.example.demolab1.mapper.FruitMapper;
 import com.example.demolab1.repository.FruitRepository;
-import com.example.demolab1.validate.FruitValidator;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -20,8 +23,6 @@ public class FruitController {
     @Inject
     FruitRepository repository;
 
-    @Inject
-    FruitValidator validator;
 
     @Inject
     FruitMapper mapper;
@@ -39,11 +40,17 @@ public class FruitController {
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Return Fruit Object",
+            content = @Content(schema = @Schema(implementation = FruitDto.class))),
+            @ApiResponse(responseCode = "404", description = "Id Not Found")})
     public Response getOne(@PathParam("id") Long id) {
         var fruit = repository.findOne(id);
         if (fruit.isPresent())
             return Response.ok().entity(fruit.get()).build();
-        return Response.status(404).build();
+        //return Response.status(404).build();
+        //throw new IdMissingException("message" + id);
+        throw new NotFoundException("Id" + id);
     }
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
